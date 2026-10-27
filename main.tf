@@ -3,6 +3,24 @@ resource "azuread_user" "users" {
 
   display_name                = each.value.display_name
   user_principal_name         = each.value.user_principal_name
+  account_enabled             = each.value.account_enabled
+  age_group                   = each.value.age_group
+  business_phones             = each.value.business_phones
+  city                        = each.value.city
+  company_name                = each.value.company_name
+  consent_provided_for_minor  = each.value.consent_provided_for_minor
+  cost_center                 = each.value.cost_center
+  country                     = each.value.country
+  department                  = each.value.department
+  disable_password_expiration = each.value.disable_password_expiration
+  disable_strong_password     = each.value.disable_strong_password
+  division                    = each.value.division
+  employee_hire_date          = each.value.employee_hire_date
+  employee_id                 = each.value.employee_id
+  employee_type               = each.value.employee_type
+  fax_number                  = each.value.fax_number
+  force_password_change       = each.value.force_password_change
+  given_name                  = each.value.given_name
   job_title                   = each.value.job_title
   mail                        = each.value.mail
   mail_nickname               = each.value.mail_nickname
@@ -17,25 +35,17 @@ resource "azuread_user" "users" {
   show_in_address_list        = each.value.show_in_address_list
   state                       = each.value.state
   street_address              = each.value.street_address
-  given_name                  = each.value.given_name
-  force_password_change       = each.value.force_password_change
-  fax_number                  = each.value.fax_number
-  employee_type               = each.value.employee_type
-  account_enabled             = each.value.account_enabled
-  age_group                   = each.value.age_group
-  business_phones             = each.value.business_phones
-  city                        = each.value.city
-  company_name                = each.value.company_name
-  consent_provided_for_minor  = each.value.consent_provided_for_minor
   surname                     = each.value.surname
-  cost_center                 = each.value.cost_center
-  department                  = each.value.department
-  disable_password_expiration = each.value.disable_password_expiration
-  disable_strong_password     = each.value.disable_strong_password
-  division                    = each.value.division
-  employee_hire_date          = each.value.employee_hire_date
-  employee_id                 = each.value.employee_id
-  country                     = each.value.country
   usage_location              = each.value.usage_location
+
+  dynamic "timeouts" {
+    for_each = each.value.timeouts != null ? [each.value.timeouts] : []
+    content {
+      create = timeouts.value.create
+      delete = timeouts.value.delete
+      read   = timeouts.value.read
+      update = timeouts.value.update
+    }
+  }
 }
 

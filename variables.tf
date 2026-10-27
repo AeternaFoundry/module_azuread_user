@@ -39,11 +39,34 @@ Optional:
     - street_address
     - surname
     - usage_location
+    - timeouts (block):
+        - create (optional)
+        - delete (optional)
+        - read (optional)
+        - update (optional)
 EOT
 
   type = map(object({
     display_name                = string
     user_principal_name         = string
+    account_enabled             = optional(bool)
+    age_group                   = optional(string)
+    business_phones             = optional(list(string))
+    city                        = optional(string)
+    company_name                = optional(string)
+    consent_provided_for_minor  = optional(string)
+    cost_center                 = optional(string)
+    country                     = optional(string)
+    department                  = optional(string)
+    disable_password_expiration = optional(bool)
+    disable_strong_password     = optional(bool)
+    division                    = optional(string)
+    employee_hire_date          = optional(string)
+    employee_id                 = optional(string)
+    employee_type               = optional(string)
+    fax_number                  = optional(string)
+    force_password_change       = optional(bool)
+    given_name                  = optional(string)
     job_title                   = optional(string)
     mail                        = optional(string)
     mail_nickname               = optional(string)
@@ -58,26 +81,14 @@ EOT
     show_in_address_list        = optional(bool)
     state                       = optional(string)
     street_address              = optional(string)
-    given_name                  = optional(string)
-    force_password_change       = optional(bool)
-    fax_number                  = optional(string)
-    employee_type               = optional(string)
-    account_enabled             = optional(bool)
-    age_group                   = optional(string)
-    business_phones             = optional(list(string))
-    city                        = optional(string)
-    company_name                = optional(string)
-    consent_provided_for_minor  = optional(string)
     surname                     = optional(string)
-    cost_center                 = optional(string)
-    department                  = optional(string)
-    disable_password_expiration = optional(bool)
-    disable_strong_password     = optional(bool)
-    division                    = optional(string)
-    employee_hire_date          = optional(string)
-    employee_id                 = optional(string)
-    country                     = optional(string)
     usage_location              = optional(string)
+    timeouts = optional(object({
+      create = optional(string)
+      delete = optional(string)
+      read   = optional(string)
+      update = optional(string)
+    }))
   }))
   validation {
     condition = alltrue([
@@ -90,18 +101,18 @@ EOT
   validation {
     condition = alltrue([
       for k, v in var.users : (
-        v.employee_id == null || (length(v.employee_id) >= 0 && length(v.employee_id) <= 16)
+        v.employee_id == null || (length(v.employee_id) <= 16)
       )
     ])
-    error_message = "must be between 0 and 16 characters"
+    error_message = "must be at most 16 characters"
   }
   validation {
     condition = alltrue([
       for k, v in var.users : (
-        v.employee_type == null || (length(v.employee_type) >= 0 && length(v.employee_type) <= 64)
+        v.employee_type == null || (length(v.employee_type) <= 64)
       )
     ])
-    error_message = "must be between 0 and 64 characters"
+    error_message = "must be at most 64 characters"
   }
   validation {
     condition = alltrue([
